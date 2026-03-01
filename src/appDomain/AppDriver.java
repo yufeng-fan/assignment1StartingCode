@@ -12,6 +12,15 @@ import shapes.Pyramid;
 import shapes.Shape;
 import shapes.SquarePrism;
 import shapes.TriangularPrism;
+import utilities.BubbleSort;
+import utilities.CustomSort;
+import utilities.InsertionSort;
+import utilities.MergeSort;
+import utilities.QuickSort;
+import utilities.SelectionSort;
+import utilities.SortStrategy;
+import utilities.VolumnCompare;
+import utilities.BaseAreaCompare;
 
 /**
  * <p>
@@ -23,8 +32,25 @@ import shapes.TriangularPrism;
  */
 public class AppDriver
 {
+	// file path
 	private static String file;
+	/**
+	 * Comparison types:
+		H/h: height 
+		V/v: volume
+		A/a: base area
+	 */
 	private static String type;
+	
+	/**
+	 * Sorting Algorithms:
+		I/i: Insertion
+		S/s: Selection
+		B/b: Bubble
+		M/m: Merge
+		Q/q: Quick
+		Z/z: Algorithm of your choice
+	 */
 	private static String sort;
 	
 	/**
@@ -57,8 +83,37 @@ public class AppDriver
 		// read all shapes
 		Shape[] shapes = appDriver.readShapesFromFile(AppDriver.file);
 
+		// get algorithm 
+		SortStrategy sortStrategy;
+		if (AppDriver.sort.equals("i")) {
+			sortStrategy = new InsertionSort();
+		}else if (AppDriver.sort.equals("s")) {
+			sortStrategy = new SelectionSort();
+		}else if (AppDriver.sort.equals("b")) {
+			sortStrategy = new BubbleSort();
+		}else if (AppDriver.sort.equals("m")) {
+			sortStrategy = new MergeSort();
+		}else if (AppDriver.sort.equals("q")) {
+			sortStrategy = new QuickSort();
+		}else if (AppDriver.sort.equals("z")) {
+			sortStrategy = new CustomSort();
+		}else {
+			sortStrategy = new BubbleSort();
+		}
 		
-
+		// sort by compare type
+		long startTime = System.currentTimeMillis();
+		if(AppDriver.type.equals("h")) {
+			sortStrategy.sort(shapes);
+		} else if(AppDriver.type.equals("v")) {
+			sortStrategy.sort(shapes, new VolumnCompare());
+		}else if(AppDriver.type.equals("v")) {
+			sortStrategy.sort(shapes, new BaseAreaCompare());
+		}
+		long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
+        
+        
 	}
 	
 	private void parseArgs( String[] args )
@@ -74,12 +129,12 @@ public class AppDriver
 		for( int i = 0; i < args.length; i++ )
 		{
 			System.out.println( args[i] );
-			if(args[i].startsWith("-f")){
+			if(args[i].toLowerCase().startsWith("-f")){
 				AppDriver.file = args[i].substring(2);
-			}else if(args[i].startsWith("-t")) {
-				AppDriver.type = args[i].substring(2);
-			}else if(args[i].startsWith("-s")) {
-				AppDriver.sort = args[i].substring(2);
+			}else if(args[i].toLowerCase().startsWith("-t")) {
+				AppDriver.type = args[i].substring(2).toLowerCase();
+			}else if(args[i].toLowerCase().startsWith("-s")) {
+				AppDriver.sort = args[i].substring(2).toLowerCase();
 			}
 		}
 		System.out.println( "Done testing args!\n" );
