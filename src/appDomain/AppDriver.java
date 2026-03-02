@@ -79,9 +79,15 @@ public class AppDriver
 		
 		// parse args
 		appDriver.parseArgs(args);
+		if(AppDriver.file == null || AppDriver.type == null || AppDriver.sort == null) {
+			return;
+		}
 		
 		// read all shapes
 		Shape[] shapes = appDriver.readShapesFromFile(AppDriver.file);
+		if(shapes == null) {
+			return;
+		}
 
 		// get algorithm 
 		SortStrategy sortStrategy;
@@ -116,6 +122,8 @@ public class AppDriver
 			sortStrategy.sort(shapes, new VolumnCompare());
 		}else if(AppDriver.type.equals("a")) {
 			sortStrategy.sort(shapes, new BaseAreaCompare());
+		} else {
+			sortStrategy.sort(shapes);
 		}
 		long endTime = shapes.length < 100 ? System.nanoTime(): System.currentTimeMillis();
         long duration = endTime - startTime;
@@ -169,7 +177,12 @@ public class AppDriver
 		{
 			System.out.println( args[i] );
 			if(args[i].toLowerCase().startsWith("-f")){
-				AppDriver.file = args[i].substring(2);
+				if(args[i].contains("\"")){
+					AppDriver.file = args[i].substring(3, args[i].length() - 1);
+				}else {
+					AppDriver.file = args[i].substring(2);
+				}
+				
 			}else if(args[i].toLowerCase().startsWith("-t")) {
 				AppDriver.type = args[i].substring(2).toLowerCase();
 			}else if(args[i].toLowerCase().startsWith("-s")) {
