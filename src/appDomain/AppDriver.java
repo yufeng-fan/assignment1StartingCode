@@ -31,7 +31,7 @@ import utilities.BaseAreaCompare;
  * </p>
  */
 public class AppDriver
-{
+{	
 	// file path
 	private static String file;
 	/**
@@ -85,34 +85,73 @@ public class AppDriver
 
 		// get algorithm 
 		SortStrategy sortStrategy;
+		String sortName = "Bubble";
 		if (AppDriver.sort.equals("i")) {
 			sortStrategy = new InsertionSort();
+			sortName = "Insertion";
 		}else if (AppDriver.sort.equals("s")) {
 			sortStrategy = new SelectionSort();
+			sortName = "Selection";
 		}else if (AppDriver.sort.equals("b")) {
 			sortStrategy = new BubbleSort();
+			sortName = "Bubble";
 		}else if (AppDriver.sort.equals("m")) {
 			sortStrategy = new MergeSort();
+			sortName = "Merge";
 		}else if (AppDriver.sort.equals("q")) {
 			sortStrategy = new QuickSort();
+			sortName = "Quick";
 		}else if (AppDriver.sort.equals("z")) {
 			sortStrategy = new CustomSort();
+			sortName = "Custom";
 		}else {
 			sortStrategy = new BubbleSort();
 		}
 		
 		// sort by compare type
-		long startTime = System.currentTimeMillis();
+		long startTime = shapes.length < 100 ? System.nanoTime(): System.currentTimeMillis();
 		if(AppDriver.type.equals("h")) {
 			sortStrategy.sort(shapes);
 		} else if(AppDriver.type.equals("v")) {
 			sortStrategy.sort(shapes, new VolumnCompare());
-		}else if(AppDriver.type.equals("v")) {
+		}else if(AppDriver.type.equals("a")) {
 			sortStrategy.sort(shapes, new BaseAreaCompare());
 		}
-		long endTime = System.currentTimeMillis();
+		long endTime = shapes.length < 100 ? System.nanoTime(): System.currentTimeMillis();
         long duration = endTime - startTime;
         
+        // print the sorted result
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i<shapes.length; i++) {
+			if (i == 0 || i == shapes.length - 1 || i % 1000 == 0) {
+
+				if (i == 0) {
+					sb.append(String.format("%-25s", "First element is:"));
+				} else if (i == shapes.length - 1) {
+					sb.append(String.format("%-25s", "Last element is:"));
+				} else if (i % 1000 == 0) {
+					sb.append(String.format("%-25s", i + "-th element:"));
+				}
+
+				sb.append(String.format("%25s", shapes[i].getClass().getName()));
+				sb.append(String.format("%10s", ""));
+
+				if (AppDriver.type.equals("h")) {
+					sb.append(String.format("%-25s", "Height: " + shapes[i].getHeight()));
+				} else if (AppDriver.type.equals("v")) {
+					sb.append(String.format("%-25s", "Volumn: " + shapes[i].calcVolume()));
+				} else if (AppDriver.type.equals("a")) {
+					sb.append(String.format("%-25s", "Area: " + shapes[i].calcBaseArea()));
+				}
+				sb.append("\n");
+			}
+        }
+        
+        sb.append(sortName);
+        sb.append(" Sort run time was: ");
+        sb.append(duration);
+        sb.append(shapes.length < 100 ? " nanoseconds." : " milliseconds.");
+        System.out.println(sb.toString());
         
 	}
 	
