@@ -18,7 +18,7 @@ PROGRAM DESCRIPTION: AppDriver.java :is the main Class that load the data files 
 														shellSort: sort shapes using shellSort						
 */
 // abstract class
-public abstract class Shape {
+public abstract class Shape implements Comparable<Shape>{
 	protected static final double PI = Math.PI; // children classes or all classes in the can take this attribute
 	private double height;
 	

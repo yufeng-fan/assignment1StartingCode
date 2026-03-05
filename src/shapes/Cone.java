@@ -46,6 +46,20 @@ public class Cone extends Shape
 		this.type = type;
 	}
 // abstract methods that extended (calVolume, calBaseArea , output)
+	
+	// Compares the height of this shape and another shape.
+	public int compareTo(Shape s) {
+		if (this.getHeight() > s.getHeight() ) {
+			return 1;
+		}
+		else if (this.getHeight() < s.getHeight() ) {
+			return -1;
+		}
+		else {
+			return 0;
+		}
+	}
+		
 	// calculate
 	@Override
 	//calculate the volume

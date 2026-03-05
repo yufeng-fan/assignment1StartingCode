@@ -18,6 +18,7 @@ PROGRAM DESCRIPTION: AppDriver.java :is the main Class that load the data files 
  														shellSort: sort shapes using shellSort						
 */
 import java.util.Comparator;
+import shapes.Shape;
 
 public class MergeSort {
 	public <T> void mergeSort(T[] shapes, Comparator<T> comparator) {
@@ -25,8 +26,8 @@ public class MergeSort {
 			int length = shapes.length;
 			if(length <=1) return; // not need to sort and the condition to stop the recursion
 			int middle = length /2; // divide arrayShape to 2 arrays
-			T[] leftArray = (T[]) new Object[middle];
-			T[] rightArray = (T[]) new Object[length - middle];
+			T[] leftArray = (T[]) new Shape[middle];
+			T[] rightArray = (T[]) new Shape[length - middle];
 			
 			int i=0;  //index of left  array
 			int j=0; //index of right array

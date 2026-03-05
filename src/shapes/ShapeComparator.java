@@ -36,21 +36,13 @@ public class ShapeComparator implements Comparator<Shape>{
 	}
 	
 	@Override
-	//compare acsending
+	//compare ascending
 	public int compare(Shape o1, Shape o2) {
 		// TODO Auto-generated method stub
 		 // based on the type(h,v,a) --> compare shapes
 		switch(Character.toLowerCase(type)) {
 			case 'h':
-				if(o1.getHeight() > o2.getHeight()) {
-					return 1;
-				}
-				else if(o1.getHeight() < o2.getHeight()) {
-					return -1;
-				}
-				else {
-					return 0;
-				}
+				o1.compareTo(o2);
 			case 'v':
 				if(o1.calVolume() > o2.calVolume()) {
 					return 1;
