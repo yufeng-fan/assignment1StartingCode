@@ -21,20 +21,23 @@ import java.util.Comparator;
 public class SelectionSort {
 	public <T> void selectionSort(T[] shapes, Comparator<T> comparator) {
 		int selectedIndex; // initialize the selectedIndex
-				for(int i=0; i< shapes.length -1; i++) { // run to end array 
-					selectedIndex =i;  // initialize the selectedIndex
-					// initialize j = next index of i 
-					for(int j= i+1; j< shapes.length ;j++) {
-						// if value of shapes[j] > shapes[selectedIndex]
-						if(comparator.compare(shapes[j], shapes[selectedIndex]) > 0) {
-							selectedIndex = j; // --> choose the larger number between (value[i] , value[selected])
-						}
-					} 
-					//swap the value of selectedIndex and i
-					T temp = shapes[i];
-					shapes[i] = shapes[selectedIndex];
-					shapes[selectedIndex] = temp;
+		
+			for(int i=0; i< shapes.length -1; i++) { // run to end array 
+				selectedIndex =i;  // initialize the selectedIndex
+				
+				// initialize j = next index of i 
+				for(int j= i+1; j< shapes.length ;j++) {
+					// if value of shapes[j] > shapes[selectedIndex]
+					if(comparator.compare(shapes[j], shapes[selectedIndex]) > 0) {
+						selectedIndex = j; // --> choose the larger number between (value[i] , value[selected])
+					}
 				}
+				
+				//swap the value of selectedIndex and i
+				T temp = shapes[i];
+				shapes[i] = shapes[selectedIndex];
+				shapes[selectedIndex] = temp;
+			}
 			
 			
 		}

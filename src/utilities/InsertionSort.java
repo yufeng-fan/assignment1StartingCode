@@ -20,15 +20,19 @@ PROGRAM DESCRIPTION: AppDriver.java :is the main Class that load the data files 
 */
 public class InsertionSort {
 	public <T> void insertionSort(T[] shapes, Comparator<T> comparator) {
+		
 				// while i< shapes.length 
 				for(int i=1; i< shapes.length;i++) {
+					
 					T key = shapes[i]; // initialize the key value 
 					int j = i-1; // the previous index
+					
 					// moving, if previousValue < currentValue --> currentValue = previous Value until j< 0
 					while(j >=0  && comparator.compare(shapes[j], key) < 0) {
 						shapes[j+1] = shapes[j];
 						j--;
 					}
+					
 					// loop until the previous >= current, the  current value = key
 					shapes[j+1] = key;
 				}

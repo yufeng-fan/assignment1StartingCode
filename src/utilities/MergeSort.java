@@ -24,13 +24,14 @@ public class MergeSort {
 	public <T> void mergeSort(T[] shapes, Comparator<T> comparator) {
 			// idea split to other arrays then compare and merge arrays again --> using recursion
 			int length = shapes.length;
-			if(length <=1) return; // not need to sort and the condition to stop the recursion
-			int middle = length /2; // divide arrayShape to 2 arrays
+			if(length <= 1) return; // not need to sort and the condition to stop the recursion
+			int middle = length / 2; // divide arrayShape to 2 arrays
 			T[] leftArray = (T[]) new Shape[middle];
 			T[] rightArray = (T[]) new Shape[length - middle];
 			
-			int i=0;  //index of left  array
+			int i=0;  //index of left array
 			int j=0; //index of right array
+			
 			// store shapesValue into both arrays(left and right) to compare
 			for(; i< length; i++) { 
 				if(i< middle ) {
@@ -47,10 +48,11 @@ public class MergeSort {
 	}
 	private <T> void merge(T[] leftArray, T[] rightArray, T[] shapes, Comparator<T> comparator ) {
 		int leftSize = shapes.length / 2; // recalculate the size of arrays
-		int rightSize = shapes.length -leftSize; 
-		int i =0, l = 0, r =0; // indices
+		int rightSize = shapes.length - leftSize; 
+		int i = 0, l = 0, r = 0; // indices
 		// the conditions for merging
 		while(l < leftSize && r < rightSize) { // if both arrays still have indexes --> loop
+			
 			// value in left array is greater than right array --> store in shapes at first element then continue 
 			if(comparator.compare(leftArray[l], rightArray[r]) > 0) {
 				shapes[i] = leftArray[l];
@@ -63,12 +65,12 @@ public class MergeSort {
 				r++;
 			}
 		}
-		while(l< leftSize ) { // if rightSize don't have any index value to compare --> store to shapes
+		while(l < leftSize ) { // if rightSize don't have any index value to compare --> store to shapes
 			shapes[i] = leftArray[l];
 			i++;
 			l++;
 		}
-		while(r< rightSize) { // if leftSize don't have any index value to compare --> store to shapes
+		while(r < rightSize) { // if leftSize don't have any index value to compare --> store to shapes
 			shapes[i] = rightArray[r];
 			i++;
 			r++;

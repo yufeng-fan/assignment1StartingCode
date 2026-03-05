@@ -20,6 +20,7 @@ PROGRAM DESCRIPTION: AppDriver.java :is the main Class that load the data files 
 import java.util.Comparator;
 // idea: sorted first, last and middle element first then choose pivot then compare pivot. If greater than pivot move before pivot otherwise move left
 public class QuickSort {
+	
 	public <T> void quickSort(int start, int end,T[] shapes, Comparator<T> comparator) {
         if (end <= start) return; // to stop the recursion
         medianOfThree(start, end, shapes,  comparator); // compare mid, start 
@@ -27,10 +28,11 @@ public class QuickSort {
 		quickSort(start, pivot -1, shapes, comparator); // recursion the leftSize
 		quickSort(pivot + 1, end, shapes, comparator); // recursion the right Size
 	} 
+	
 	private <T> int partition(int start, int end,T[] shapes, Comparator<T> comparator) {
 		T pivot = shapes[end]; // choose the pivot at the end of array
-		int i = start -1; // initialize index i = -1
-		for(int j =start ; j <=end -1; j++) { // run j at index = 0 
+		int i = start-1; // initialize index i = -1
+		for(int j = start; j <= end-1; j++) { // run j at index = 0 
 			if(comparator.compare(shapes[j], pivot) > 0) { // if pivot > shapes [j] --> i++ AND swap(i , j)
 				i++;
 				swap(shapes, i, j);

@@ -95,7 +95,8 @@ public class AppDriver
 							// Cylinder
 							case "cylinder":{
 								double radius  = Double.parseDouble(fields[2].trim()); 
-								shapes[index++] = new Cylinder(height, radius); 
+								shapes[index++] = new Cylinder(height, radius);
+								break;
 							}
 							//OctagonalPrism
 							case "octagonalprism":{
@@ -263,8 +264,7 @@ public class AppDriver
 	}
 	// console.log : using to display indexOfShapes		TypeShapes and	type of shapes the user want to compare (h, v or a)
 	private static void consoleSort(int numberShapes) {
-//		if(numberShapes>= 1000) {
-		//for i in numberShapes, i+=1000 --> display the information of shapes 
+		// for i in numberShapes, i+=1000 --> display the information of shapes every thousand shapes
 			for(int i=0;i< numberShapes; i+=1000) {
 				if(i==0) {
 					System.out.println("First element is: \t\t"+ shapes[0].output(compareType));
@@ -274,21 +274,8 @@ public class AppDriver
 				}
 			}
 			System.out.println("Last element is: \t\t"+ shapes[numberShapes-1].output(compareType));
+		}
 		
-//		else if(numberShapes <= 1000) {
-//			for(int i=0; i< numberShapes; i++) {
-//				if( i == 0) {
-//					System.out.println("First element is: \t\t"+ shapes[0].output(compareType));
-//				}
-//				else if(i== numberShapes -1) {
-//					System.out.println("Last element is: \t\t"+ shapes[numberShapes-1].output(compareType));
-//				}
-//				else {
-//					System.out.println(i+"-th element: \t\t"+ shapes[i].output(compareType));
-//				}
-//			}
-//		}
-	}
 	// calculate runtime milliseconds
 	private static int runTimeMS(long start, long end) {
 		return (int) ((end - start) /1000000);

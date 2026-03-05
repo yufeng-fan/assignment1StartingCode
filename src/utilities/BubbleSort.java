@@ -35,8 +35,7 @@ public class BubbleSort {
 	                shapes[j+1] = temp;
 	                changes++;
 	               
-	            }
-	            
+	            }      
 	        }
 	        
 	        // Stops the method early if the array doesn't change
