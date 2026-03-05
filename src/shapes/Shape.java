@@ -36,6 +36,20 @@ public abstract class Shape implements Comparable<Shape>{
 	public void setHeight(double height) {
 		this.height = height;
 	}
+	
+	// Compares the height of this shape and another shape.
+	public int compareTo(Shape s) {
+		if (this.getHeight() > s.getHeight() ) {
+			return 1;
+		}
+		else if (this.getHeight() < s.getHeight() ) {
+			return -1;
+		}
+		else {
+			return 0;
+		}
+	}
+	
 	// abstract method
 	public abstract double calVolume();
 	public abstract double calBaseArea();

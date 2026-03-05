@@ -42,7 +42,7 @@ public class ShapeComparator implements Comparator<Shape>{
 		 // based on the type(h,v,a) --> compare shapes
 		switch(Character.toLowerCase(type)) {
 			case 'h':
-				o1.compareTo(o2);
+				return o1.compareTo(o2);
 			case 'v':
 				if(o1.calVolume() > o2.calVolume()) {
 					return 1;

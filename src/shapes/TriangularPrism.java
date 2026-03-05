@@ -27,19 +27,6 @@ public class TriangularPrism extends Prism
 		this.type = "TriangularPrism";
 	
 	}
-
-	// Compares the height of this shape and another shape.
-	public int compareTo(Shape s) {
-		if (this.getHeight() > s.getHeight() ) {
-			return 1;
-		}
-		else if (this.getHeight() < s.getHeight() ) {
-			return -1;
-		}
-		else {
-			return 0;
-		}
-	}
 	
 	// calculate the volume
 	@Override
