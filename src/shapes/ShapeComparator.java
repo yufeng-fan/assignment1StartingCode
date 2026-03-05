@@ -1,4 +1,4 @@
-package utilities;
+package shapes;
 /*
 Team ZELDA: PHAN CAO THANH VINH, Yufeng Fan, Jianning Li, Henry Leung
 DATE: March 4, 2026
@@ -18,20 +18,63 @@ PROGRAM DESCRIPTION: AppDriver.java :is the main Class that load the data files 
  														shellSort: sort shapes using shellSort						
 */
 import java.util.Comparator;
-public class BubbleSort {
-	public <T> void bubbleSort(T[] shapes, Comparator<T> comparator) {
-		// loop while i< shapes.length -1
-	    for(int i = 0; i < shapes.length - 1; i++) {
-	        for(int j = 0; j < shapes.length - 1 - i; j++) {
-	        	//if currentValue < nextValue --> swap(current, next)
-	            if(comparator.compare(shapes[j], shapes[j+1]) < 0) {
-	                T temp = shapes[j];
-	                shapes[j] = shapes[j+1];
-	                shapes[j+1] = temp;
-	               
-	            }
-	            
-	        }
-	    }
+// compare shapeValues (h, v, a)
+public class ShapeComparator implements Comparator<Shape>{
+	private char type; // 'h : height', 'v: volume', 'a: base Area'
+	// constructors
+	public ShapeComparator(char type) {
+		super();
+		this.type = type;
 	}
+	// gettter , setter
+	public char getType() {
+		return type;
+	}
+	
+	public void setType(char type) {
+		this.type = type; 
+	}
+	
+	@Override
+	//compare acsending
+	public int compare(Shape o1, Shape o2) {
+		// TODO Auto-generated method stub
+		 // based on the type(h,v,a) --> compare shapes
+		switch(Character.toLowerCase(type)) {
+			case 'h':
+				if(o1.getHeight() > o2.getHeight()) {
+					return 1;
+				}
+				else if(o1.getHeight() < o2.getHeight()) {
+					return -1;
+				}
+				else {
+					return 0;
+				}
+			case 'v':
+				if(o1.calVolume() > o2.calVolume()) {
+					return 1;
+				}
+				else if(o1.calVolume() < o2.calVolume()) {
+					return -1;
+				}
+				else {
+					return 0;
+				}
+			case 'a':
+				if(o1.calBaseArea() > o2.calBaseArea()) {
+					return 1;
+				}
+				else if(o1.calBaseArea() < o2.calBaseArea()) {
+					return -1;
+				}
+				else {
+					return 0;
+				}
+			default:
+	            throw new IllegalArgumentException("Invalid compare type");
+		}
+		
+	}
+	
 }

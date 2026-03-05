@@ -1,27 +1,47 @@
 package appDomain;
+//Assignment 1: Complexity and Sorting
 
-import java.io.File;
+/*
+Team ZELDA: PHAN CAO THANH VINH, Yufeng Fan, Jianning Li, Henry Leung
+DATE: March 4, 2026
+PROGRAM DESCRIPTION: AppDriver.java :is the main Class that load the data files (Shapes) , read the via from the command prompt of users and display the output sorting for users
+ 									EXCEPTION via - length input of users >= 3 and contain -f"fileName.txt" -t"compareType" -s"sortType". If it's not correct --> display Error and Exit();
+ 									Read data Files - Based on the name of each line of file , it will be stored to the shapeArray and divide into shapes or prisms that it belongs to
+ 									Sort and runTime - Based on the via , it will jump to the sortType that users want and calculate the runTime of it, 
+ 									Output - Based on the compareType and sortType, it will display the descending sort for users
+ 			shapes package : Shape.java : - abstract class that contain abstract methods(calculate the Volume and Area and Output for shapes)
+ 							 Prism.java : - abstract class for the shapes that belongs to Prism (SquarePrism,.. ) 
+ 							 ShapeComparator.java: the child class that inheritance the comparator interface, based on the compareType(h: height, v: Volume, a: area) this class helps to compare shapeValues 
+ 							The others : - Class that extends the abstract classes, get abstract methods to calculate the base and area, display Output
+ 			utilities package(contain all of sortTypes): BubbleSort: sort shapes using bubble sort
+ 														InsertionSort: sort shapes using insertionSort
+ 														MergeSort: sort shapes using mergeSort
+ 														QuickSort: sort shapes using quickSort
+ 														shellSort: sort shapes using shellSort						
+*/
+// import libraries
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
+import java.io.FileReader;
+import java.io.IOException;
 
+// from shapes packages
 import shapes.Cone;
 import shapes.Cylinder;
 import shapes.OctagonalPrism;
 import shapes.PentagonalPrism;
 import shapes.Pyramid;
 import shapes.Shape;
+import shapes.ShapeComparator;
 import shapes.SquarePrism;
 import shapes.TriangularPrism;
+// sorts
 import utilities.BubbleSort;
-import utilities.CustomSort;
 import utilities.InsertionSort;
 import utilities.MergeSort;
 import utilities.QuickSort;
 import utilities.SelectionSort;
-import utilities.SortStrategy;
-import utilities.VolumnCompare;
-import utilities.BaseAreaCompare;
-
+import utilities.ShellSort;
 /**
  * <p>
  * This application driver code is designed to be used as a basis for the
@@ -31,246 +51,247 @@ import utilities.BaseAreaCompare;
  * </p>
  */
 public class AppDriver
-{	
-	// file path
-	private static String file;
-	/**
-	 * Comparison types:
-		H/h: height 
-		V/v: volume
-		A/a: base area
-	 */
-	private static String type;
-	
-	/**
-	 * Sorting Algorithms:
-		I/i: Insertion
-		S/s: Selection
-		B/b: Bubble
-		M/m: Merge
-		Q/q: Quick
-		Z/z: Algorithm of your choice
-	 */
-	private static String sort;
-	
+{
 	/**
 	 *  The main method is the entry point of the application.
 	 *  
 	 *  @param args The input to control the execution of the application.
 	 */
+	static int numberShapes; // shapes length
+	static Shape[] shapes; // the array to store shape values
+	static String PATH ; // filename
+	static char compareType; // v: volume, h: height ,a: area 
+	static char sortType; // b: Bubble Sort, i: Insertion Sort, m: Merge Sort ,  q: Quick Sort, s: Selection Sort, z: Shell Sort
+	
+	// main methods
 	public static void main( String[] args )
 	{
-		// TODO Auto-generated method stub
-
-		// refer to demo00 BasicFileIO.java for a simple example on how to
-		// read data from a text file
-
-		// refer to demo01 Test.java for an example on how to parse command
-		// line arguments and benchmarking tests
-
-		// refer to demo02 Student.java for comparable implementation, and
-		// NameCompare.java or GradeCompare for comparator implementations
-
-		// refer to demo02 KittySort.java on how to use a custom sorting
-		// algorithm on a list of comparables to sort using either the
-		// natural order (comparable) or other orders (comparators)
-		
-		AppDriver appDriver = new AppDriver();
-		
-		// parse args
-		appDriver.parseArgs(args);
-		if(AppDriver.file == null || AppDriver.type == null || AppDriver.sort == null) {
-			return;
-		}
-		
-		// read all shapes
-		Shape[] shapes = appDriver.readShapesFromFile(AppDriver.file);
-		if(shapes == null) {
-			return;
-		}
-
-		// get algorithm 
-		SortStrategy sortStrategy;
-		String sortName = "Bubble";
-		if (AppDriver.sort.equals("i")) {
-			sortStrategy = new InsertionSort();
-			sortName = "Insertion";
-		}else if (AppDriver.sort.equals("s")) {
-			sortStrategy = new SelectionSort();
-			sortName = "Selection";
-		}else if (AppDriver.sort.equals("b")) {
-			sortStrategy = new BubbleSort();
-			sortName = "Bubble";
-		}else if (AppDriver.sort.equals("m")) {
-			sortStrategy = new MergeSort();
-			sortName = "Merge";
-		}else if (AppDriver.sort.equals("q")) {
-			sortStrategy = new QuickSort();
-			sortName = "Quick";
-		}else if (AppDriver.sort.equals("z")) {
-			sortStrategy = new CustomSort();
-			sortName = "Custom";
-		}else {
-			sortStrategy = new BubbleSort();
-		}
-		
-		// sort by compare type
-		long startTime = shapes.length < 100 ? System.nanoTime(): System.currentTimeMillis();
-		if(AppDriver.type.equals("h")) {
-			sortStrategy.sort(shapes);
-		} else if(AppDriver.type.equals("v")) {
-			sortStrategy.sort(shapes, new VolumnCompare());
-		}else if(AppDriver.type.equals("a")) {
-			sortStrategy.sort(shapes, new BaseAreaCompare());
-		} else {
-			sortStrategy.sort(shapes);
-		}
-		long endTime = shapes.length < 100 ? System.nanoTime(): System.currentTimeMillis();
-        long duration = endTime - startTime;
-        
-        // print the sorted result
-        StringBuilder sb = new StringBuilder();
-        for(int i = 0; i<shapes.length; i++) {
-			if (i == 0 || i == shapes.length - 1 || i % 1000 == 0) {
-
-				if (i == 0) {
-					sb.append(String.format("%-25s", "First element is:"));
-				} else if (i == shapes.length - 1) {
-					sb.append(String.format("%-25s", "Last element is:"));
-				} else if (i % 1000 == 0) {
-					sb.append(String.format("%-25s", i + "-th element:"));
-				}
-
-				sb.append(String.format("%25s", shapes[i].getClass().getName()));
-				sb.append(String.format("%10s", ""));
-
-				if (AppDriver.type.equals("h")) {
-					sb.append(String.format("%-25s", "Height: " + shapes[i].getHeight()));
-				} else if (AppDriver.type.equals("v")) {
-					sb.append(String.format("%-25s", "Volumn: " + shapes[i].calcVolume()));
-				} else if (AppDriver.type.equals("a")) {
-					sb.append(String.format("%-25s", "Area: " + shapes[i].calcBaseArea()));
-				}
-				sb.append("\n");
-			}
-        }
-        
-        sb.append(sortName);
-        sb.append(" Sort run time was: ");
-        sb.append(duration);
-        sb.append(shapes.length < 100 ? " nanoseconds." : " milliseconds.");
-        System.out.println(sb.toString());
-        
+		parseArgs(args); 
 	}
-	
-	private void parseArgs( String[] args )
-	{
-		if( args.length < 3 )
-		{
-			System.out.println( "Not enough arguments." );
-			System.out.println( "Usage: -ffile_name -ttype -ssort" );
-			return;
-		}
-
-		System.out.println( "Testing args..." );
-		for( int i = 0; i < args.length; i++ )
-		{
-			System.out.println( args[i] );
-			if(args[i].toLowerCase().startsWith("-f")){
-				if(args[i].contains("\"")){
-					AppDriver.file = args[i].substring(3, args[i].length() - 1);
-				}else {
-					AppDriver.file = args[i].substring(2);
-				}
-				
-			}else if(args[i].toLowerCase().startsWith("-t")) {
-				AppDriver.type = args[i].substring(2).toLowerCase();
-			}else if(args[i].toLowerCase().startsWith("-s")) {
-				AppDriver.sort = args[i].substring(2).toLowerCase();
-			}
-		}
-		System.out.println( "Done testing args!\n" );
-	}
-
-	private Shape[] readShapesFromFile(String file) {
-		File inputFile = new File(file);
-		Shape[] shapes = null;
-		
-		try (Scanner input = new Scanner( inputFile ))
-		{
-			
-			//first line is the number of shapes 
-			int numbers = Integer.parseInt(input.nextLine());
-			shapes = new Shape[numbers];
-			
-			String[] shapeLine;
-			String type;	
-			int i = 0;
-			while( input.hasNext() )
-			{
-				shapeLine= input.nextLine().split(" ");
-				type = shapeLine[0];
-				
-				switch(type) {
-				case "Cylinder":
-					Cylinder cylinder = new Cylinder();
-					cylinder.setHeight(Double.parseDouble(shapeLine[1]));
-					cylinder.setRadius(Double.parseDouble(shapeLine[2]));
-					shapes[i++] = cylinder;
-					break;
-				case "Cone":
-					Cone cone = new Cone();
-					cone.setHeight(Double.parseDouble(shapeLine[1]));
-					cone.setRadius(Double.parseDouble(shapeLine[2]));
-					shapes[i++] = cone;
-					break;
-				case "Pyramid":
-					Pyramid pyramid = new Pyramid();
-					pyramid.setHeight(Double.parseDouble(shapeLine[1]));
-					pyramid.setSide(Double.parseDouble(shapeLine[2]));
-					shapes[i++] = pyramid;
-					break;
-				case "SquarePrism":
-					SquarePrism squarePrism = new SquarePrism();
-					squarePrism.setHeight(Double.parseDouble(shapeLine[1]));
-					squarePrism.setSide(Double.parseDouble(shapeLine[2]));
-					shapes[i++] = squarePrism;
-					break;
-				case "TriangularPrism":
-					TriangularPrism triangularPrism = new TriangularPrism();
-					triangularPrism.setHeight(Double.parseDouble(shapeLine[1]));
-					triangularPrism.setSide(Double.parseDouble(shapeLine[2]));
-					shapes[i++] = triangularPrism;
-					break;
-				case "PentagonalPrism":
-					PentagonalPrism pentagonalPrism = new PentagonalPrism();
-					pentagonalPrism.setHeight(Double.parseDouble(shapeLine[1]));
-					pentagonalPrism.setSide(Double.parseDouble(shapeLine[2]));
-					shapes[i++] = pentagonalPrism;
-					break;
-				case "OctagonalPrism":
-					OctagonalPrism octagonalPrism = new OctagonalPrism();
-					octagonalPrism.setHeight(Double.parseDouble(shapeLine[1]));
-					octagonalPrism.setSide(Double.parseDouble(shapeLine[2]));
-					shapes[i++] = octagonalPrism;
-					break;
-				default:
+	// read the file.txt then store all value to list of shapes
+	private static void loadShapeList() {		
+				try(BufferedReader reader = new BufferedReader(new FileReader(PATH))){
+//					
+					long start, end; // initialize the attributes for runTime
+					ShapeComparator sc = new ShapeComparator(compareType); //based on compareType to sort the value of shapes by descending
+					String firstLine = reader.readLine(); // access the first line to read number of shapes
+					numberShapes = Integer.parseInt(firstLine.trim()); // store number of shapes
+					int index =0; // index to store the value of shapes
+					shapes = new Shape[numberShapes]; // create the number of shapesArray
+					String line; // initialize the attribute to read each line of file
+					// if the line read out of the file AND the index is equal or greater than number of shapes --> out loop
+					while((line = reader.readLine()) != null && index < numberShapes) {
+						String[] fields = line.split(" "); //create the array to store type of shapes, height and side/radius
+						String type = fields[0].trim(); // store the type of shapes (Cone, Cylinder , ...)
+						double height = Double.parseDouble(fields[1].trim()); // store the height of shapes
+						//based on the type of shapes, it will store to radius or side value then store type of shapes into shapeArray
+						switch(type.toLowerCase()) { // change to the lowerCase
+						// Cone
+							case "cone": {
+								double radius = Double.parseDouble(fields[2].trim());  
+								shapes[index++] = new Cone(height, radius);
+								break;
+							}
+							// Cylinder
+							case "cylinder":{
+								double radius  = Double.parseDouble(fields[2].trim()); 
+								shapes[index++] = new Cylinder(height, radius); 
+							}
+							//OctagonalPrism
+							case "octagonalprism":{
+								double side = Double.parseDouble(fields[2].trim());
+								shapes[index++] =  new OctagonalPrism(height, side);
+								break;
+							}
+							// PentagonalPrism
+							case "pentagonalprism":{
+							    double side = Double.parseDouble(fields[2].trim());
+								shapes[index++] = new PentagonalPrism(height, side);
+								break;
+							}
+							// Pyramid
+							case "pyramid":{
+								double side = Double.parseDouble(fields[2].trim());
+								shapes[index++] = new Pyramid(height, side);
+								break;
+							}
+							//SquarePrism
+							case "squareprism":{
+								double side = Double.parseDouble(fields[2].trim());
+								shapes[index++] = new SquarePrism(height,side);
+								break;
+							}
+							// TriangularPrism
+							case "triangularprism":{
+							double side = Double.parseDouble(fields[2].trim());
+								shapes[index++] = new TriangularPrism(height, side);
+								break;
+							}
+							// not found display on screen to fix bug file.txt
+							default: 
+								System.out.println("Invalid Shape! at line :" + index+1);
+								continue;
+						}	
+					}	
+					// sort	 need type sort and the array of shapes ==> return the array
+					System.out.println("Start sorting...");
+					// Based on sortType , the shapesArray will sort using these types: b is Bubble Sort, s is Selection Sort, i is Insertion Sort, m is mergeSort. q is Quick Sort, z: ShellSort
+					// calculate the run time of each type of sorts then display on screen
+					switch(sortType) {
+					//bubble sort
+						case 'b':
+							BubbleSort bs = new BubbleSort();
+							start = System.nanoTime();
+							bs.bubbleSort(shapes, sc);
+							end = System.nanoTime();
+							consoleSort(numberShapes);
+							System.out.println("Bubble Sort run time was: " + runTimeMS(start, end)+ " milliseconds");
+							break;
+					// selection sort
+						case 's':
+							SelectionSort ss =new SelectionSort();
+							start = System.nanoTime();
+							ss.selectionSort(shapes, sc);
+							end = System.nanoTime();
+							consoleSort(numberShapes);
+							System.out.println("Selection Sort run time was: " + runTimeMS(start, end)+ " milliseconds");
+							break;
+				   // insertion sort
+						case 'i':
+							InsertionSort is = new InsertionSort();
+							start = System.nanoTime();
+							is.insertionSort(shapes, sc);
+							end = System.nanoTime();
+							consoleSort(numberShapes);
+							System.out.println("Insertion Sort run time was: " + runTimeMS(start,end)+ " milliseconds");
+							break;
+					// merge sort
+						case 'm':
+							MergeSort ms = new MergeSort();
+							start = System.nanoTime();
+							ms.mergeSort(shapes, sc);
+							end = System.nanoTime();
+							consoleSort(numberShapes);
+							System.out.println("Merge Sort run time was: "+ runTimeMS(start,end)+ " milliseconds");
+							break;
+					// quick sort
+						case 'q':
+							QuickSort qs = new QuickSort();
+							start = System.nanoTime();
+							qs.quickSort(0, numberShapes-1, shapes, sc);
+							end = System.nanoTime();
+							consoleSort(numberShapes);
+							System.out.println("Quick Sort run time was: "+ runTimeMS(start,end)+ " milliseconds");
+							break;
+					// shell sort
+						case 'z':
+							ShellSort shell = new ShellSort();
+							start = System.nanoTime();
+							shell.shellSort(shapes, sc);
+							end = System.nanoTime();
+							consoleSort(numberShapes);
+							System.out.println("Shell Sort run time was: "+ runTimeMS(start, end) + " milliseconds");
+							break;
+					// invalid type
+						default :
+							System.out.println("Invalid Sort Type!");
+							
+							break;
+					}	
+					reader.close(); // close reading the file
 					
 				}
+				//EXCEPTION while reading the file
+				catch (FileNotFoundException e) {
+					e.printStackTrace();
+				 }		
+				 catch (IOException e) {
+					e.printStackTrace();
+				}
+
+	}
+	// refer to demo01 Test.java for an example on how to parse command
+	// line arguments and benchmarking tests
+	private static void parseArgs( String[] args ) {
+		// length of args is less than 3 return the error  on screen
+		if(args.length <3) {
+			System.out.println("Not enough arguments");
+			return;
+		}
+		// for loop
+		for(String arg: args) {
+			arg = arg.toLowerCase(); // change case of string
+			if(arg.startsWith("-f")) { // start with -f read after to get the filePath
+				PATH= arg.substring(2).replace("\"", "");
+			}
+			else if(arg.startsWith("-t")) { // start -t read after to get the compareType
+				 compareType = arg.charAt(2);
+				 compareType= Character.toLowerCase(compareType);
+			}
+			else if(arg.startsWith("-s")) { // start -s read after to get the sortType
+				 sortType = arg.charAt(2);
+				 sortType=Character.toLowerCase(sortType);
+			}
+			// return 
+			else {
+				System.out.println("SOmething wrong");
+				
+				return;
 			}
 		}
-		catch( FileNotFoundException e )
-		{
-			e.printStackTrace();
+		//exception
+		// fileName is empty or -f"" --> return Error
+		if(PATH.trim().equals("-f")  || PATH.isEmpty() ) {
+			System.out.println("Please Enter FileName!");
+			return;
 		}
-		
-		/*
-		 * for(int i=0; i<shapes.length; i++) {
-		 * System.out.println(shapes[i].getClass().getName());
-		 * System.out.println(shapes[i].getHeight());
-		 * System.out.println(shapes[i].calcBaseArea());
-		 * System.out.println(shapes[i].calcVolume()); }
-		 */
-		return shapes;
+		// compare is not in(v,h,a) --> return Error
+		else if(compareType != 'v' && compareType != 'h' && compareType != 'a') {
+			System.out.println("Please enter correct option to compare!");
+			System.out.println("h: height, v: volume, a: area");
+			return;
+		}
+		// sort is not in (b,s,i,m,q,z) --> return error
+		else if(sortType!= 'b' && sortType != 's' && sortType != 'i' && sortType != 'm' && sortType != 'q' && sortType != 'z') {
+			System.out.println("Please enter correct option to sort");
+			System.out.println("b: Bubble Sort, s: Selection Sort, i: Insertion Sort, m: Merge Sort, q: Quick Sort, z: Shell Sort");
+			return;
+		}
+	
+		//System.out.println(PATH +  compareType + sortType);
+		loadShapeList(); // running loadShapeLIst method
 	}
+	// console.log : using to display indexOfShapes		TypeShapes and	type of shapes the user want to compare (h, v or a)
+	private static void consoleSort(int numberShapes) {
+//		if(numberShapes>= 1000) {
+		//for i in numberShapes, i+=1000 --> display the information of shapes 
+			for(int i=0;i< numberShapes; i+=1000) {
+				if(i==0) {
+					System.out.println("First element is: \t\t"+ shapes[0].output(compareType));
+				}
+				else {
+					System.out.println(i+"-th element: \t\t"+ shapes[i].output(compareType));
+				}
+			}
+			System.out.println("Last element is: \t\t"+ shapes[numberShapes-1].output(compareType));
+		
+//		else if(numberShapes <= 1000) {
+//			for(int i=0; i< numberShapes; i++) {
+//				if( i == 0) {
+//					System.out.println("First element is: \t\t"+ shapes[0].output(compareType));
+//				}
+//				else if(i== numberShapes -1) {
+//					System.out.println("Last element is: \t\t"+ shapes[numberShapes-1].output(compareType));
+//				}
+//				else {
+//					System.out.println(i+"-th element: \t\t"+ shapes[i].output(compareType));
+//				}
+//			}
+//		}
+	}
+	// calculate runtime milliseconds
+	private static int runTimeMS(long start, long end) {
+		return (int) ((end - start) /1000000);
+	}
+	
 }
